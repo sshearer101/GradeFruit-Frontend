@@ -1,30 +1,21 @@
 import React, { useState } from "react";
 
-function LoginForm({ setUser }) {
+function LoginForm({ login }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("")
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    }).then((r) => {
-      if (r.ok) {
-        r.json().then((user) => setUser(user));
-      }
-    });
-  }
+function handleSubmitLogin(e){
+    e.preventDefault()
+    login(username, password, role)
+}
 
   return (
     <div>
         {/* <div>
             <img className = "login-img" src = "./Images/Logo.png" alt = "e-marker-logo"/>
         </div> */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleSubmitLogin(e)}>
         <h1 className = "login-name">Login</h1>
         <label htmlFor="username">Username</label>
         <input
@@ -42,6 +33,11 @@ function LoginForm({ setUser }) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+         <label htmlFor="role">Role</label>
+        <select value={setRole.value}>
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+        </select>
         <button type="submit">Login</button>
       </form>
     </div>

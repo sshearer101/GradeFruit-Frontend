@@ -3,12 +3,19 @@ import { Link } from 'react-router-dom';
 import Classes from './Classes';
 import NewAssignmentForm from './NewAssignmentForm';
 import MessageBoard from './MessageBoard';
+import Assignments from './Assignments';
 
 
 function Home({ user }) {
   if (user) {
     return (
-      <div>
+   
+      <main>
+        {user.role === "teacher" ? (
+
+          //teacher home
+
+          <div>
         <h1>Welcome, {user.full_name}!</h1>
         <h3> Grade Level: {user.grade_level}</h3>
         <img
@@ -21,13 +28,41 @@ function Home({ user }) {
             <Link to="/classes">Classes <Classes user={user}/> </Link>
           </div>
           <div className="tabs-header">
-            <Link to="/assignments">Assignments <NewAssignmentForm user={user} /> </Link>
+            <Link to="/newassignments">New Assignments <NewAssignmentForm user={user} /> </Link>
           </div>
           <div className="tabs-header">
             <Link to="/messages">Messages <MessageBoard user={user} /></Link>
           </div>
         </div>
-      </div>
+        </div>
+        ) : (
+
+          //student home
+
+          <div>
+        <h1>Welcome, {user.full_name}!</h1>
+        <h3> Grade Level: {user.grade_level}</h3>
+        <img
+          className="teacher-image"
+          src={user.image_link}
+          alt="teacherimage"
+        />
+        <div className="home-tabs">
+          <div className="tabs-header">
+            <Link to="/classes">Classes <Classes user={user}/> </Link>
+          </div>
+          <div className="tabs-header">
+            <Link to="/assignments">Current Assignments <Assignments user={user} /> </Link>
+          </div>
+          <div className="tabs-header">
+            <Link to="/messages">Messages <MessageBoard user={user} /></Link>
+          </div>
+        </div>
+        </div>
+
+        )}
+
+      </main>
     )
   } else {
     return (

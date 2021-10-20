@@ -1,44 +1,23 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom"
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
-function SignUp({ setTeacher }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+function SignUp({ signup }) {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [role, setRole] = useState('')
 
-  const production = 'https://ss-my-final-project.herokuapp.com/'
-  const development = 'http://localhost:3000/'
-  const url = process.env.NODE_ENV ? production : development
-
-  const history = useHistory()
-
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    fetch(`${url}/user`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user: {
-        username,
-        password,
-        password_confirmation: passwordConfirmation}
-      }),
-    })
-        .then((r) => r.json())
-        .then((data) => {
-            history.push('/home')
-        }
-    );
+  function handleSubmitSignup(e) {
+    e.preventDefault()
+    signup(username, password, passwordConfirmation, role)
   }
 
   return (
     <div>
-        {/* <div>
+      {/* <div>
             <img className = "sign-up-img" src = "./Images/Logo.png" alt = "e-marker-logo"/>
         </div> */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleSubmitSignup(e)}>
         <h1>Sign Up</h1>
         <label htmlFor="username">Username</label>
         <input
@@ -64,12 +43,15 @@ function SignUp({ setTeacher }) {
           onChange={(e) => setPasswordConfirmation(e.target.value)}
           autoComplete="current-password"
         />
+        <label htmlFor="role">Role</label>
+        <select value={setRole.value}>
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+        </select>
         <button type="submit">Sign Up</button>
       </form>
     </div>
-  );
+  )
 }
 
-export default SignUp;
-
-
+export default SignUp

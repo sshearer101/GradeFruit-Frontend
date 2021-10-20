@@ -12,33 +12,101 @@ function App() {
   const development = 'http://localhost:3000/'
   const url = process.env.NODE_ENV ? production : development
 
-  const [user, setUser] = useState({})
+    
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [user, setUser] = useState()
 
   useEffect(() => {
-    fetch(`/me`).then((r) => {
-      if (r.ok) {
-        r.json().then((user) => {
-          setUser(user)
-        })
+  const token = localStorage.getItem("jwt");
+    fetch(`http://localhost:3000/profile`, {
+    method: "GET",
+    headers: {
+    Authorization: `Bearer ${token}`,
+    },
+  }).then((response) => {
+    if (response.ok) {
+      response.json().then((data) => {
+        setLoggedIn(true)
+        setUser(data.user)
+      });
+    } else {
+      console.log("please log in")
+    }
+  });
+  }, []);
+  
+  
+  function signup(username, password, password_confirmation, role) {
+      fetch(`http://localhost:3000/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        user: {
+          username: `${username}`,
+          password: `${password}`,
+          password_confirmation: `${password_confirmation}`,
+          role: `${role}`
+        },
+      }),
+    })
+    .then((response) => {
+      if (response.ok) {
+        response.json().then((data) => {
+          setUser(data.user)
+          setLoggedIn(true)
+          localStorage.setItem("jwt", data.jwt);
+        });
+      } else {
+        console.log("form incorrectly filled out")
       }
     })
-  }, [])
+  }
 
-  // fetch("http://localhost:3000/profile", {
-  //   method: "GET",
-  //   headers: {
-  //     Authorization: `Bearer <token>`,
-  //   },
-  // });
+  function login(username, password, role) {
+      fetch(`http://localhost:3000/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        user: {
+          username: `${username}`,
+          password: `${password}`,
+          role: `${role}`
 
-  if (!user) return <Login setUser={setUser}/>
+        }
+      })
+    }).then((response) => {
+      if (response.ok) {
+        response.json().then((data) => {
+          console.log( "hi" + data.jwt )
+          setUser(data.user)
+          setLoggedIn(true)
+          localStorage.setItem("jwt", data.jwt);
+        });
+      } else {
+        console.log("wrong username/password")
+      }
+    })
+  }
+
+  function logout() {
+    localStorage.clear()
+    setUser(null)
+    setLoggedIn(false)
+  }
+
 
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <NavBar user={user} setUser={setUser} />
 
       <main>
-        {user ? (
+        {loggedIn ? (
           <div>
             <Switch>
               <Route exact path="/">
@@ -48,17 +116,18 @@ function App() {
               {/* <Route exact path="/classes">
                 <Classes />
               </Route> */}
+              <button className="logout" onClick={logout}>Logout</button>
             </Switch>
           </div>
         ) : (
           <div>
             <Switch>
               <Route path="/signup">
-                <SignUp setUser={setUser}/>
+                <SignUp signup={signup}/>
               </Route>
 
               <Route path="/login">
-                <Login setUser={setUser}/>
+                <Login login={login}/>
               </Route>
 
               <Route path="/">
