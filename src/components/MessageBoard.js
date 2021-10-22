@@ -1,14 +1,26 @@
-import NewMessageContainer from "./NewMessageContainer"
-import NewMessage from "./NewMessage"
+import NewMessageContainer from './NewMessageContainer'
+import NewMessage from './NewMessage'
 
-export default function MessageBoard() {
-    return (
-    <div>
+export default function MessageBoard({ user }) {
+  console.log(user)
+
+  return (
+    <main>
+      {user.role === 'teacher' ? (
         <div>
+          <h1>{user.name}</h1>
+          <div>
             <NewMessageContainer />
-        </div>
-        <div>
+          </div>
+          <div>
             <NewMessage />
+          </div>
         </div>
-    </div>
-    )}
+      ) : (
+        <div>
+          <h1>thing </h1>
+        </div>
+      )}
+    </main>
+  )
+}

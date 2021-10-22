@@ -1,67 +1,116 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Classes from './Classes';
-import NewAssignmentForm from './NewAssignmentForm';
-import MessageBoard from './MessageBoard';
-import Assignments from './Assignments';
-
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import Classes from './Classes'
+import MessageBoard from './MessageBoard'
+import Assignments from './Assignments'
+import NewAssignmentForm from './NewAssignmentForm'
 
 function Home({ user }) {
+
+  const [scheduleForm, setScheduleForm] = useState(false)
+  const [gpaForm, setGpaForm] = useState(false)
+  const [assignmentForm, setAssignmentForm] = useState(false)
+
+  function handleGPAClick(e) {
+    e.preventDefault()
+    setGpaForm(!gpaForm)
+  }
+
+  function handleScheduleClick(e) {
+    e.preventDefault()
+    setScheduleForm(!scheduleForm)
+  }
+
+  function handleAssignmentClick(e) {
+    e.preventDefault()
+    setAssignmentForm(!assignmentForm)
+  }
+
+
   if (user) {
     return (
-   
-      <main>
-        {user.role === "teacher" ? (
-
+      <main className="home-page">
+        {user.role === 'teacher' ? (
           //teacher home
 
           <div>
-        <h1>Welcome, {user.full_name}!</h1>
-        <h3> Grade Level: {user.grade_level}</h3>
-        <img
-          className="teacher-image"
-          src={user.image_link}
-          alt="teacherimage"
-        />
-        <div className="home-tabs">
-          <div className="tabs-header">
-            <Link to="/classes">Classes <Classes user={user}/> </Link>
-          </div>
-          <div className="tabs-header">
-            <Link to="/newassignments">New Assignments <NewAssignmentForm user={user} /> </Link>
-          </div>
-          <div className="tabs-header">
-            <Link to="/messages">Messages <MessageBoard user={user} /></Link>
-          </div>
-        </div>
-        </div>
-        ) : (
+            <h1>Welcome, {user.full_name}!</h1>
+            <h3> Grade Level: {user.grade_level}</h3>
+            <h3> Subject: {user.subject}</h3>
 
+            <img
+              className="teacher-image"
+              src={user.image_link}
+              alt="teacherimage"
+            />
+            <div className="home-tabs">
+              <div className="class-link">
+                <Link to="/classes">
+                  Classes <Classes user={user} />
+                </Link>
+              </div>
+              <div className="tabs-header">
+                <Link to="/messages">
+                  Messages <MessageBoard user={user} />
+                </Link>
+              </div>
+              <div className="assignment-button-container">
+            <button className="add-assignment-button" onClick={handleAssignmentClick}>
+              Add Assignment
+            </button>
+          </div>
+          <div className="tabs-header">
+            {assignmentForm ? <NewAssignmentForm user={user} /> : ''}
+          </div>
+            </div>
+          </div>
+        ) : (
           //student home
 
           <div>
-        <h1>Welcome, {user.full_name}!</h1>
-        <h3> Grade Level: {user.grade_level}</h3>
-        <img
-          className="teacher-image"
-          src={user.image_link}
-          alt="teacherimage"
-        />
-        <div className="home-tabs">
-          <div className="tabs-header">
-            <Link to="/classes">Classes <Classes user={user}/> </Link>
+            {console.log(user)}
+            <h1>Welcome, {user.full_name}!</h1>
+            <h3> Grade Level: {user.grade_level}</h3>
+            <img
+              className="teacher-image"
+              src={user.image_link}
+              alt="teacherimage"
+            />
+            <div className="home-tabs">
+            <div className="schedule-button-container">
+                <button className="show-schedule-button" onClick={handleScheduleClick}>
+                  Show Schedule
+                </button>
+              </div>
+              <div className="schedule-container">
+                {scheduleForm ? <h3>Classes: 
+                  {user.math}
+                  {user.social_studies}
+                  {user.language_arts}
+                  {user.science}
+                  </h3> : ''}
+              </div>
+              <div className="grade-button-container">
+                <button className="show-grade-button" onClick={handleGPAClick}>
+                  Show Grades
+                </button>
+              </div>
+              <div className="tabs-header">
+                {gpaForm ? <h3>GPA: {user.grade}</h3> : ''}
+              </div>
+              <div className="tabs-header">
+                <Link to="/assignments">
+                  Current Assignments <Assignments user={user} />{' '}
+                </Link>
+              </div>
+              <div className="tabs-header">
+                <Link to="/messages">
+                  Messages <MessageBoard user={user} />
+                </Link>
+              </div>
+            </div>
           </div>
-          <div className="tabs-header">
-            <Link to="/assignments">Current Assignments <Assignments user={user} /> </Link>
-          </div>
-          <div className="tabs-header">
-            <Link to="/messages">Messages <MessageBoard user={user} /></Link>
-          </div>
-        </div>
-        </div>
-
         )}
-
       </main>
     )
   } else {

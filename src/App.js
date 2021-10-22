@@ -5,16 +5,18 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
+import Classes from './components/Classes';
 
 
 function App() {
-  const production = 'https://ss-my-final-project.herokuapp.com/'
-  const development = 'http://localhost:3000/'
-  const url = process.env.NODE_ENV ? production : development
+  // const production = 'https://ss-my-final-project.herokuapp.com/'
+  // const development = 'http://localhost:3000/'
+  // const url = process.env.NODE_ENV ? production : development
 
     
   const [loggedIn, setLoggedIn] = useState(false)
-  const [user, setUser] = useState()
+  const [user, setUser] = useState({})
+
 
   useEffect(() => {
   const token = localStorage.getItem("jwt");
@@ -48,7 +50,7 @@ function App() {
           username: `${username}`,
           password: `${password}`,
           password_confirmation: `${password_confirmation}`,
-          role: `${role}`
+          role: `${role}`,
         },
       }),
     })
@@ -77,7 +79,6 @@ function App() {
           username: `${username}`,
           password: `${password}`,
           role: `${role}`
-
         }
       })
     }).then((response) => {
@@ -100,10 +101,13 @@ function App() {
     setLoggedIn(false)
   }
 
+  function searchStudent(){
+    
+  }
 
   return (
     <Router basename={process.env.PUBLIC_URL}>
-      <NavBar user={user} setUser={setUser} />
+      <NavBar user={user} setUser={setUser} logout={logout}/>
 
       <main>
         {loggedIn ? (
@@ -113,10 +117,9 @@ function App() {
                 <Home user={user} />
               </Route>
 
-              {/* <Route exact path="/classes">
+              <Route exact path="/classes">
                 <Classes />
-              </Route> */}
-              <button className="logout" onClick={logout}>Logout</button>
+              </Route>
             </Switch>
           </div>
         ) : (
