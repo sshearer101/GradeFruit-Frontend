@@ -5,7 +5,10 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
-import Classes from './components/Classes';
+import Courses from './components/Courses';
+import MessageBoard from './components/MessageBoard';
+import Students from './components/Students';
+
 
 
 function App() {
@@ -16,6 +19,10 @@ function App() {
     
   const [loggedIn, setLoggedIn] = useState(false)
   const [user, setUser] = useState({})
+  const [students, setStudents] = useState([])
+  const [search, setSearch] = useState('')
+  const [assignments, setAssignments] = useState([])
+  const [courses, setCourses] = useState([])
 
 
   useEffect(() => {
@@ -30,15 +37,17 @@ function App() {
       response.json().then((data) => {
         setLoggedIn(true)
         setUser(data.user)
+        setStudents(data.user.students)
+        setAssignments(data.user.assignments)
+        setCourses(data.user.courses)
       });
     } else {
       console.log("please log in")
     }
   });
   }, []);
-  
-  
-  function signup(username, password, password_confirmation, role) {
+
+  function signup(full_name, grade_level, image_link, username, password, password_confirmation, role) {
       fetch(`http://localhost:3000/users`, {
       method: "POST",
       headers: {
@@ -47,6 +56,9 @@ function App() {
       },
       body: JSON.stringify({
         user: {
+          full_name: `${full_name}`,
+          grade_level: `${grade_level}`,
+          image_link: `${image_link}`,
           username: `${username}`,
           password: `${password}`,
           password_confirmation: `${password_confirmation}`,
@@ -101,25 +113,57 @@ function App() {
     setLoggedIn(false)
   }
 
-  function searchStudent(){
+
+
+
+  function addAssignment(name, assignment_link, grade){
+    fetch(`/profile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: `${name}`,
+        assignment_link: `${assignment_link}`,
+        grade: `${grade}`,
+        teacher_id: `${user.id}`
+      }),
+
+    })
+      .then((r) => r.json())
+      .then(student => {
+        setStudents([...students, student])
     
+      });
   }
 
+
+  
   return (
     <Router basename={process.env.PUBLIC_URL}>
-      <NavBar user={user} setUser={setUser} logout={logout}/>
+      <NavBar user={user} setUser={setUser} logout={logout} students={students}/>
 
       <main>
         {loggedIn ? (
           <div>
             <Switch>
               <Route exact path="/">
-                <Home user={user} />
+                <Home user={user} students={students} addAssignment={addAssignment}/>
               </Route>
 
+
               <Route exact path="/classes">
-                <Classes />
+                <Courses user={user} students={students} courses={courses} assignments={assignments} />
               </Route>
+
+              <Route exact path="/students">
+                <Students user={user} students={students} onSearch={setSearch}/>
+              </Route>
+
+              <Route exact path="/messages">
+                <MessageBoard user={user} students={students}/>
+              </Route>
+
             </Switch>
           </div>
         ) : (

@@ -2,7 +2,6 @@ import NewMessageContainer from './NewMessageContainer'
 import NewMessage from './NewMessage'
 
 export default function MessageBoard({ user }) {
-  console.log(user)
 
   return (
     <main>

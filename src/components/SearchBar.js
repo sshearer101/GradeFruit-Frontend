@@ -1,15 +1,15 @@
 import {useState} from "react"
 
-export default function SearchBar({ user }){
+export default function SearchBar({ student, onSearch}){
 
-    const [student, setStudent] = useState('')
+const [search, setSearch] = useState('')
+
 
     function handleSearch(e){
         e.preventDefault()
-        user(student)
+        onSearch(search)
     }
 
-    
 
     return(
         <div>
@@ -18,9 +18,9 @@ export default function SearchBar({ user }){
         <input
           type="text"
           id="student"
-          autoComplete="off"
-          value={student}
-          onChange={(e) => setStudent(e.target.value)}
+          placeholder="search students"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <button type="submit">Search</button>
       </form>

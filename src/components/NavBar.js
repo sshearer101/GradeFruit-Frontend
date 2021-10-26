@@ -1,24 +1,24 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import SearchBar from './SearchBar'
 
-function NavBar({ user, setUser, logout }) {
+function NavBar({ user, setUser, logout, students }) {
   return (
+    
     <div className="header">
       <div className="home-header">
         <Link to="/">Home</Link>
       </div>
+      <Link to="/students">Students</Link>
+
+      <Link to="/classes">Classes</Link>
+
       <div className="login-signup-header">
         {user ? (
           <div>
             <div>
-              {/* <Link to="/prof">Profile</Link>  */}
               <button className="logout" onClick={logout}>
                 Logout
               </button>
-            </div>
-            <div>
-              <SearchBar user={user}/>
             </div>
           </div>
         ) : (
