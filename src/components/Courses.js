@@ -2,7 +2,7 @@ import NewAssignmentForm from './NewAssignmentForm'
 import { useState } from 'react'
 import CourseContainer from './CourseContainer'
 
-export default function Courses({ user, courses, assignments, addAssignment }) {
+export default function Courses({ user, courses }) {
   const [scheduleForm, setScheduleForm] = useState(false)
   const [gpaForm, setGpaForm] = useState(false)
 
@@ -24,7 +24,6 @@ export default function Courses({ user, courses, assignments, addAssignment }) {
             <CourseContainer
               course={course}
               key={course.id}
-              addAssignment={addAssignment}
             />
           ))}
         </div>

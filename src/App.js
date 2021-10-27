@@ -10,20 +10,19 @@ import MessageBoard from './components/MessageBoard'
 import Students from './components/Students'
 
 function App() {
-  // const production = 'https://ss-my-final-project.herokuapp.com/'
-  // const development = 'http://localhost:3000/'
-  // const url = process.env.NODE_ENV ? production : development
+  const production = 'https://ss-my-final-project.herokuapp.com/'
+  const development = 'http://localhost:3000/'
+  const url = process.env.NODE_ENV === "production" ? production : development
 
   const [loggedIn, setLoggedIn] = useState(false)
   const [user, setUser] = useState({})
   const [students, setStudents] = useState([])
   const [search, setSearch] = useState('')
-  const [assignments, setAssignments] = useState([])
   const [courses, setCourses] = useState([])
 
   useEffect(() => {
     const token = localStorage.getItem('jwt')
-    fetch(`http://localhost:3000/profile`, {
+    fetch(`${url}/profile`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -34,7 +33,6 @@ function App() {
           setLoggedIn(true)
           setUser(data.user)
           setStudents(data.user.students)
-          setAssignments(data.user.assignments)
           setCourses(data.user.courses)
         })
       } else {
@@ -52,7 +50,7 @@ function App() {
     password_confirmation,
     role,
   ) {
-    fetch(`http://localhost:3000/users`, {
+    fetch(`${url}/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +81,7 @@ function App() {
   }
 
   function login(username, password, role) {
-    fetch(`http://localhost:3000/login`, {
+    fetch(`${url}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -116,25 +114,6 @@ function App() {
     setLoggedIn(false)
   }
 
-  function addAssignment(name, assignment_link, due_date) {
-    fetch(`/assignment`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: `${name}`,
-        assignment_link: `${assignment_link}`,
-        due_date: `${due_date}`,
-        course_id: `${courses.id}`,
-      }),
-    })
-      .then((r) => r.json())
-      .then((student) => {
-        setStudents([...students, student])
-      })
-  }
-
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <NavBar
@@ -153,13 +132,7 @@ function App() {
               </Route>
 
               <Route exact path="/classes">
-                <Courses
-                  user={user}
-                  students={students}
-                  courses={courses}
-                  assignments={assignments}
-                  addAssignment={addAssignment}
-                />
+                <Courses user={user} students={students} courses={courses} />
               </Route>
 
               {user.role === 'teacher' ? (
