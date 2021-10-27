@@ -1,17 +1,17 @@
 import { useState } from 'react'
 
-export default function NewAssignmentForm(user, addAssignment) {
+export default function NewAssignmentForm(addAssignment) {
   const [name, setName] = useState('')
   const [assignment_link, setAssignmentLink] = useState('')
-  const [grade, setGrade] = useState('')
+  const [due_date, setDueDate] = useState('')
 
-  function handleAddAssignment(e) {
+  function handleSubmit(e) {
     e.preventDefault()
-    addAssignment(name, assignment_link, grade)
+    addAssignment(name, assignment_link, due_date)
   }
 
   return (
-    <form onSubmit={handleAddAssignment}>
+    <form onSubmit={handleSubmit}>
       <input
         className="name-input"
         type="text"
@@ -27,11 +27,11 @@ export default function NewAssignmentForm(user, addAssignment) {
         onChange={(e) => setAssignmentLink(e.target.value)}
       />
       <input
-        className="grade-input"
-        name="grade"
-        placeholder="Add Grade..."
-        value={grade}
-        onChange={(e) => setGrade(e.target.value)}
+        className="date-input"
+        type="text"
+        placeholder="Add Due Date..."
+        value={due_date}
+        onChange={(e) => setDueDate(e.target.value)}
       />
       <button type="submit" name="submit">
         {' '}

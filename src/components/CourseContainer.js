@@ -1,13 +1,42 @@
-import react from "react";
+import { useState } from 'react'
+import Assignments from './Assignments'
+import NewAssignmentForm from './NewAssignmentForm'
 
-export default function CourseContainer({course}){
-    console.log(course)
-    // console.log(assignment)
-    return(
-        <div>
-            <h1 className="schedule">{course.period} Period: {course.name}</h1>
-            {/* <h3 className="assignments">Upcoming Assignments: {assignment.name}</h3> */}
+export default function CourseContainer({ course, addAssignment}) {
+  const [assignmentForm, setAssignmentForm] = useState(false)
+  const course_assignments = course.assignments
 
-        </div>
-    )
+  function handleAssignmentClick(e) {
+    e.preventDefault()
+    setAssignmentForm(!assignmentForm)
+  }
+
+  return (
+    <div>
+      <h1 className="schedule">
+        {course.period} Period: {course.name}
+      </h1>
+
+      {course_assignments.map((assignment) => (
+        <Assignments assignment={assignment} key={assignment.id} />
+      ))}
+
+<div className="assignment-button-container">
+        <button
+          className="add-assignment-button"
+          onClick={handleAssignmentClick}
+        >
+          Add Assignment
+        </button>
+      </div>
+      <div className="tabs-header">
+        {assignmentForm ? (
+          <NewAssignmentForm addAssignment={addAssignment} />
+        ) : (
+          ''
+        )}
+      </div>
+
+    </div>
+  )
 }

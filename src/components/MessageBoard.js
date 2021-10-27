@@ -2,7 +2,6 @@ import NewMessageContainer from './NewMessageContainer'
 import NewMessage from './NewMessage'
 
 export default function MessageBoard({ user }) {
-
   return (
     <main>
       {user.role === 'teacher' ? (
@@ -17,7 +16,13 @@ export default function MessageBoard({ user }) {
         </div>
       ) : (
         <div>
-          <h1>thing </h1>
+          <h1>{user.name}</h1>
+          <div>
+            <NewMessageContainer />
+          </div>
+          <div>
+            <NewMessage />
+          </div>
         </div>
       )}
     </main>
