@@ -1,70 +1,124 @@
-# Getting Started with Create React App
+# README
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Project Pitch
 
-In the project directory, you can run:
+A platform to bring the classroom online. Teachers will be able to interact and assess their students’ performances as well as communicate with them. Students will be able to submit assignments as well as communicate with the class.
 
-### `npm start`
+## User Story
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- As a teacher, I want to be able to create an account so I can log in and use the app.
+- As a teacher, I want to be able to see my students and their grades
+- As a teacher, I want to be able to create assignments for my students
+- As a teacher, I want to be able to link assignments to GitHub or google docs
+- As a teacher, I want to be able to search for students by name
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- As a student, I want to be able to create an account so I can log in and use the app.
+- As a student, I want to be able to submit assignments 
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Strech goals
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- As a teacher, I want to be able to create discussion posts
+- As a teacher, I want to be able to organize a gradebook based on weighted categories
+- As a teacher, I want to be able to message my class or my students individually
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- As a student I want to be able to contribute to discussion posts
+- As a student I want to be able to message the teacher
 
-### `npm run eject`
+## Models and Relationships
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+![image](https://user-images.githubusercontent.com/85294886/137193180-0848b0f9-0410-4845-a827-ee68d3e396db.png)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Teacher
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+A `Teacher` has many `Students` and `Assignments`
 
-## Learn More
+- id 
+- full_name
+- username
+- password
+- image_link
+- grade_level
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Student 
 
-### Code Splitting
+A `Student` belongs to a `Teacher` and a `Student` has many `Assignments`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- full_name
+- username
+- password
+- image_link
+- grade_level
+- grade
+- teacher_id
 
-### Analyzing the Bundle Size
+### Assignment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+An `Assignment` belongs to a `Teacher` and `Student`
 
-### Making a Progressive Web App
+- assignment_link
+- grade
+- teacher_id
+- student_id
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+## API Documentation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+GET/api/teachers/:id
 
-### Deployment
+`{
+	id: 1
+	full_name: “Sam Shearer”
+	username: “Mr. Shearer”
+	password: “flatiron”
+	image_link: “”
+	grade_level: “10th grade”
+}`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+Get/api/students
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`{
+	id: 1
+	full_name: "John Devins"
+	username: "jdevins"
+	password: "123"
+	image_link: ""
+	grade_level: "10th Grade"
+	grade: "77%"
+	teacher_id: 1
+}`
+
+Get/api/assignments/:id
+
+`{
+	id: 1
+	name: "States Map Quiz"
+	assignment_link: ""
+	grade: ""
+	student_id: ""
+	teacher_id: ""
+}`
+
+
+
+## Wireframes
+
+![image](https://user-images.githubusercontent.com/85294886/137209288-7b9e4516-5c35-4ee6-844b-154141e653e7.png)
+
+![image](https://user-images.githubusercontent.com/85294886/137209340-f05f88be-cbbf-42a8-9324-5f0e9e06150e.png)
+
+![image](https://user-images.githubusercontent.com/85294886/137209370-6ede4649-5023-44a7-911a-d4695c251322.png)
+
+![image](https://user-images.githubusercontent.com/85294886/137209388-3bae1fcf-28f9-4d99-b25c-8681e27bcc30.png)
+
+![image](https://user-images.githubusercontent.com/85294886/137209422-4f3d331f-f641-49c6-acec-bf1a50ab05fa.png)
+
+![image](https://user-images.githubusercontent.com/85294886/137209451-2b2df1e3-7de9-4b13-ae92-ff70adb90445.png)
+
+
